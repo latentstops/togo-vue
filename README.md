@@ -6,3 +6,7 @@ This simple application allows users to:
 * Name and save places from Google Map.
 * Filter saved places.
 * Remove or mark places visited.
+
+## Getting Started
+* npm install
+* npm run serve
