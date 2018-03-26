@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Map from './views/Map.vue'
-import Togo from './views/Togo.vue'
+import Home from './views/home.vue'
+import Togo from './views/togo-list.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.use( VueGoogleMaps, {
@@ -18,9 +18,12 @@ export default new Router( {
         {
             path: '/',
             name: 'map',
-            component: Map
-        },
-        {
+            component: Home
+        },{
+            path: '/:place-name',
+            name: 'map',
+            component: Home
+        },{
             path: '/togo',
             name: 'togo',
             component: Togo

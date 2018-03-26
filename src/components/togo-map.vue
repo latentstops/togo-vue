@@ -3,7 +3,7 @@
             style       = "width: 500px; height: 300px; margin: 0 auto"
             map-type-id = "terrain"
 
-            :center = "{lat:10, lng:10}"
+            :center = "center"
             :zoom   = "7"
 
             @click = "addMarkerAndInfoBlock"
@@ -21,7 +21,7 @@
 
         </gmap-marker>
 
-        <gmap-info-window
+        <gmap-info-window class="togo-map-info-input"
                 :options  = "info.options"
                 :position = "info.windowPos"
                 :opened   = "info.winOpen"
@@ -29,37 +29,62 @@
                 @closeclick = "info.winOpen = false"
         >
 
-            <input v-model="info.content"
-                   @keyup="changePlaceName"
-            >
-            <button @click="save">Save</button>
+            <div class="togo-map-info-cont">
+                <input class="togo-map-info-input" v-model="info.content"
+                       :disabled="getCurrentMarker().isSaved"
+                       @keyup="changePlaceName"
+                >
+                <button v-if="!getCurrentMarker().isSaved" class="togo-map-info-btn" @click="save">Save</button>
+            </div>
 
         </gmap-info-window>
     </gmap-map>
 </template>
 
 <script>
+
+    let geocoder;
+
     export default {
-        name: 'GoogleMap',
+        name: 'togo-map',
         methods: {
             addMarkerAndInfoBlock(e) {
-                let marker  = this.addMarker( e );
-                let markers = this.markers;
-                let idx     = markers.length - 1;
-                this.toggleInfoWindow( marker, idx );
+                this.searchLocation( e, results => {
+
+                    let name = results[ 0 ].formatted_address;
+
+                    this.addMarker( e, marker => {
+                        let markers     = this.markers;
+                        let idx         = markers.length - 1;
+                        marker.infoText = name;
+                        this.toggleInfoWindow( marker, idx );
+                    } );
+                } );
             },
-            addMarker(e) {
+
+            addMarker(e, callback) {
                 let markers = this.markers;
 
                 let lat      = e.latLng.lat(), lng = e.latLng.lng();
                 let position = { lat, lng };
                 let infoText = `Place ${markers.length}`;
 
-                let marker = { position, infoText };
+                let marker = { position, infoText, visited: false, isSaved: false, id: Date.now() };
 
                 markers.push( marker );
+                this.$emit( 'marker-created', marker );
+                callback( marker );
+            },
+            searchLocation( e, success ) {
+                let lat = e.latLng.lat(),
+                    lng = e.latLng.lng();
 
-                return marker;
+                let latlng = { lat, lng };
+                geocoder.geocode( { location: latlng }, (results, status) => {
+                    if (status === 'OK') {
+                        success( results );
+                    }
+                });
             },
             toggleInfoWindow: function(marker, idx) {
 
@@ -82,23 +107,22 @@
                     marker.infoText = this.info.content;
             },
             save() {
-                let markersAsJSONString = JSON.stringify( this.markers );
-                localStorage.setItem( 'markers', markersAsJSONString );
+                let marker = this.getCurrentMarker();
+                this.$emit( 'save', marker );
+            },
+            getCurrentMarker() {
+                return this.markers[ this.currentMidx ] || {};
             }
+
         },
+        props: [
+            'places',
+            'center'
+        ],
         data () {
 
-            let markers = ( () => {
-                let json = [];
-                try{
-                    json = JSON.parse( localStorage.getItem( 'markers' ) ) || [];
-                } catch ( e ) {}
-                return json;
-            })();
             return {
-                markers,
-
-                center: {lat: 10.0, lng: 10.0},
+                markers: this.places,
                 currentMidx: null,
                 index: null,
 
@@ -117,6 +141,11 @@
                     },
                 }
             }
+        },
+        created() {
+            setTimeout( () => {
+                geocoder = new google.maps.Geocoder;
+            }, 500 );
         }
     }
 </script>
@@ -146,4 +175,34 @@
         color: $primary-color;
     }
 
+
+
+    .togo-map-info-cont{
+        box-sizing: border-box;
+        color:#fff;
+        .togo-map-info-input{
+            outline: none;
+            border: 0;
+            height: 36px;
+            background-color: #ccc;
+            color: #2b2b2b;
+            padding: 0 10px;
+
+        }
+        .togo-map-info-btn{
+            background-color: #333;
+            border: 1px solid #145e82;
+            outline: none;
+            /*border: 0;*/
+            cursor: pointer;
+            height: 36px;
+            min-width: 70px;
+            margin-left: 2px;
+            border-radius: 2px;
+            color: #fff;
+            &:active {
+                background: #333 - 100;
+            }
+        }
+    }
 </style>
