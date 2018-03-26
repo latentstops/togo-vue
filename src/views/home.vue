@@ -40,8 +40,6 @@
 
             onMarkerCreated( marker ) {
                 marker.isSaved = true;
-                let exists = !!~this.places.indexOf( marker );
-                // if(!exists) return;
                 this.places.push( marker );
             },
 

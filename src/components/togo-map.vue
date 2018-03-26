@@ -193,7 +193,6 @@
             background-color: #333;
             border: 1px solid #145e82;
             outline: none;
-            /*border: 0;*/
             cursor: pointer;
             height: 36px;
             min-width: 70px;

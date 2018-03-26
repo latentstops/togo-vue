@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "npm run serve",
+    "start": "npm run build && npm run express",
+    "express": "node server",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
     "vue2-google-maps": "^0.8.10",

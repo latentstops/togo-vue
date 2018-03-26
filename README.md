@@ -9,4 +9,4 @@ This simple application allows users to:
 
 ## Getting Started
 * npm install
-* npm start
+* npm run serve
