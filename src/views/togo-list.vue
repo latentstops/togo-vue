@@ -61,7 +61,6 @@
             edit( marker ) {
                 let index = this.findIndex( marker );
                 this.currentEditableIndex = index >= 0 ? index : null;
-                // if( !marker ) this.filterCondition = '';
             },
             isEditable( marker ) {
                 let index = this.findIndex( marker );
