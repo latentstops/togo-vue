@@ -10,3 +10,6 @@ This simple application allows users to:
 ## Getting Started
 * npm install
 * npm run serve
+
+## Live example
+[togo-vue.herokuapp.com](https://togo-vue.herokuapp.com)
