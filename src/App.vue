@@ -2,7 +2,7 @@
     <div class="togo-app" id="app">
         <nav id="nav">
             <router-link class="togo-nav-item" to="/">Home</router-link>
-            <router-link class="togo-nav-item" to="/togo">Togo List</router-link>
+            <router-link class="togo-nav-item" to="/togo/list">Togo List</router-link>
         </nav>
         <router-view/>
     </div>

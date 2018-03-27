@@ -13,7 +13,7 @@
 
                 <div class="togo-list-item-name">
                     <input type="text" autofocus v-if="isEditable(marker)" @keyup.enter="edit(null)" v-model="marker.infoText">
-                    <router-link v-else to="/">{{marker.infoText}}</router-link>
+                    <router-link v-else :to="'/' + marker.id">{{marker.infoText}}</router-link>
                 </div>
 
                 <div class="togo-list-item-controls">

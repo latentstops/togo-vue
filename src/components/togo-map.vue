@@ -49,6 +49,7 @@
         name: 'togo-map',
         methods: {
             addMarkerAndInfoBlock(e) {
+                if( !this.editable ) return;
                 this.searchLocation( e, results => {
 
                     let name = results[ 0 ].formatted_address;
@@ -117,7 +118,8 @@
         },
         props: [
             'places',
-            'center'
+            'center',
+            'editable'
         ],
         data () {
 

@@ -1,6 +1,6 @@
 <template>
     <div class="togo-map-cont">
-        <togo-map :places="filteredPlaces" :center="currentGeoLocationCoords" @save="onMarkerCreated"/>
+        <togo-map :places="filteredPlaces" :editable="true" :center="currentGeoLocationCoords" @save="onMarkerCreated"/>
     </div>
 </template>
 
